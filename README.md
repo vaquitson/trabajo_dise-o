@@ -4,3 +4,7 @@ Los integrantes son:
 * **Lucas Rodriguez**
 * **Ian Schmidt**
 * **Benjamin Liberona**
+
+# Tareas:
+- [x] hacer el next
+- [ ] hola
