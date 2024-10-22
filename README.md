@@ -11,11 +11,11 @@ Primer commit:
 - [x] 	Poner nombres: check
 Segunda entrega:
 - [x] Base next: listo
-- [x] Crear Nadvar: Inicio, login, 
-- [x] Login
-- [x] Contenido(cuadros)
-- [x] Conectar los cuadros a la DDBB
-- [x] Proceso para poder añadir cuadros
-- [x] Opción para contactar a la persona
-- [x] Replicar para página de regalar cosas.
+- [ ] Crear Nadvar: Inicio, login, 
+- [ ] Login
+- [ ] Contenido(cuadros)
+- [ ] Conectar los cuadros a la DDBB
+- [ ] Proceso para poder añadir cuadros
+- [ ] Opción para contactar a la persona
+- [ ] Replicar para página de regalar cosas.
 
