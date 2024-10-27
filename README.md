@@ -4,11 +4,10 @@ Los integrantes son:
 * **Lucas Rodriguez**
 * **Ian Schmidt**
 * **Benjamin Liberona**
-- [x] 
+
 # Tareas:
-Proceso proyecto diseño de software:
-Primer commit:
-- [x] 	Poner nombres: check
+Proceso proyecto diseño de software:<br>
+- [x] 	Poner nombres: check<br>
 Segunda entrega:
 - [x] Base next: listo
 - [ ] Crear Nadvar: Inicio, login, 
