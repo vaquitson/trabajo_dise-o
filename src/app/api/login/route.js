@@ -13,11 +13,17 @@ export async function POST(req){
   const fileData = await fs.readFile(filePath, "utf8");
   const users = JSON.parse(fileData);
 
-  console.log(users)
 
   if (username in users){ 
-    return new Response("{hello}", { status:200 })
+    let passwordHash = users[username]["password"]
+    if (await bcrypt.compare(password, passwordHash)){
+      console.log("message: " +username+ " loged")
+      return new Response("message: " +username+ " loged", { status:200 })
+    }
+    return new Response("message: credencial invalida\n", { status: 401})
+
   } else {
+    console.log("message: credencial invalida\n")
     return new Response("message: credencial invalida\n", { status: 401})
   }
 
