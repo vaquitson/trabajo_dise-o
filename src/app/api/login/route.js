@@ -17,6 +17,13 @@ export async function POST(req){
   if (username in users){ 
     let passwordHash = users[username]["password"]
     if (await bcrypt.compare(password, passwordHash)){
+      // generar el jwt
+      const token = jwt.sign({username}, process.env.jwt_secret, { expireIN: "1h"})
+
+      // guardar el nombre del usuario en local storage
+      localStorage.setItem("username", username);
+      localStorage.setItem("jwt", token)
+
       console.log("message: " +username+ " loged")
       return new Response("message: " +username+ " loged", { status:200 })
     }
