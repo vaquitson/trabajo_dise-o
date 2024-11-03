@@ -1,17 +1,31 @@
 "use client"
 import { useState } from "react";
+import { useAuth } from "./../context/auth_context.js"
 
-export default function loginPage(){
+export default function LoginPage(){
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (event) => {
+  const { login, logout } = useAuth()
+
+  const handleLogin = async function (event){
     event.preventDefault();
+
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({username, password})
+      body: JSON.stringify({"username": username, "password": password})
     })
+    
+
+    if(res.ok){ 
+      let body = await res.json()
+
+      console.log(body.token)
+      login(username, body.token) 
+    } else {
+      console.log("noooo\n")
+    }
   }
 
   return (

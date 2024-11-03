@@ -18,15 +18,18 @@ export async function POST(req){
     let passwordHash = users[username]["password"]
     if (await bcrypt.compare(password, passwordHash)){
       // generar el jwt
-      const token = jwt.sign({username}, process.env.jwt_secret, { expireIN: "1h"})
+      const token = jwt.sign({username}, process.env.jwt_secret, { expiresIn: "1h"})
 
-      // guardar el nombre del usuario en local storage
-      localStorage.setItem("username", username);
-      localStorage.setItem("jwt", token)
+      let res = {
+        message: username + " loged",
+        "username": username,
+        "token": token
+      }
 
-      console.log("message: " +username+ " loged")
-      return new Response("message: " +username+ " loged", { status:200 })
+      console.log(JSON.stringify(res))
+      return new Response(JSON.stringify(res), { status:200 })
     }
+    console.log("message: credencial invalida\n")
     return new Response("message: credencial invalida\n", { status: 401})
 
   } else {
