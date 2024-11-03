@@ -1,10 +1,7 @@
 "use client"
 import { useState } from "react";
-<<<<<<< HEAD
 import Navbar from '@/components/Navbar';
-=======
 import { useAuth } from "./../context/auth_context.js"
->>>>>>> 7792b42e573d56fe582e9ee37e9eb1abdad5acba
 
 export default function LoginPage(){
   const [username, setUsername] = useState("");

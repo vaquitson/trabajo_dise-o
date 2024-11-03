@@ -1,6 +1,6 @@
 // src/components/Navbar.js
 import Link from 'next/link';
-import './Navbar.css'; // Optional: for custom navigation styles
+import './navbar.css'; // Optional: for custom navigation styles
 
 function Navbar({ setLanguage, language }) {
   return (
