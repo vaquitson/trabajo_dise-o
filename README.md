@@ -3,7 +3,7 @@ Los integrantes son:
 
 * **Lucas Rodriguez**
 * **Ian Schmidt**
-* **Benjamin Liberona**
+* **Benjamin Liberona -> vaquitson**
 
 # Tareas:
 Proceso proyecto diseño de software:<br>
