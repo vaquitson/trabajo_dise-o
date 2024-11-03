@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import Navbar from '@/components/Navbar';
 
 export default function loginPage(){
   const [username, setUsername] = useState("");
@@ -16,6 +17,7 @@ export default function loginPage(){
 
   return (
     <div>
+      <Navbar />
       <h1>Inicio de sesión</h1>
       <form onSubmit={handleLogin}>
         <input
