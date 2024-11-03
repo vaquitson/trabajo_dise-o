@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
 
-export async function GET(req){
+export async function POST(req){
   const { token } = await req.json(); 
-  const paylode = token.split(".")[1]
   
   // verificar si esta o no el token 
   if (!token){

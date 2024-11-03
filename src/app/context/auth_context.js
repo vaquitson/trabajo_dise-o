@@ -1,33 +1,16 @@
 "use client";
 import { createContext, useState, useContext, useEffect } from "react";
 
-const authContext = createContext();
+const AuthContext = createContext();
 
-export function authProvider({ child }){
+export function AuthProvider({ children }){
   const [user, setUser] = useState(null);
 
-  useEffect(function (){
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetch("api/verifie_token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({token})
-      }).then(async function (){
-        if (response.ok){
-          console.log("autorizado")
-        } else {
-          console.log("no autorizado");
-        }
-      })
-    } else {
-      console.log("no token")
-    }
-  }, []);
-
-  function login(username, token){
-    localStorage.setItem("token")
-    setUser(username)
+  
+  async function login(username, token){
+    localStorage.setItem("token", token)
+    localStorage.setItem("user", username)
+    console.log("login completo " + user + "\n")
   }
 
   function logout(){
@@ -41,3 +24,5 @@ export function authProvider({ child }){
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => useContext(AuthContext)

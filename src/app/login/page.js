@@ -1,18 +1,35 @@
 "use client"
 import { useState } from "react";
+<<<<<<< HEAD
 import Navbar from '@/components/Navbar';
+=======
+import { useAuth } from "./../context/auth_context.js"
+>>>>>>> 7792b42e573d56fe582e9ee37e9eb1abdad5acba
 
-export default function loginPage(){
+export default function LoginPage(){
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (event) => {
+  const { login, logout } = useAuth()
+
+  const handleLogin = async function (event){
     event.preventDefault();
+
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({username, password})
+      body: JSON.stringify({"username": username, "password": password})
     })
+    
+
+    if(res.ok){ 
+      let body = await res.json()
+
+      console.log(body.token)
+      login(username, body.token) 
+    } else {
+      console.log("noooo\n")
+    }
   }
 
   return (
