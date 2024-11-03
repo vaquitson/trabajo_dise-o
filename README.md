@@ -2,7 +2,7 @@ Para este trabajo se diseñará y creará una plataforma para poder enfrentar la
 Los integrantes son: 
 
 * **Lucas Rodriguez** --> luchetti64
-* **Ian Schmidt**
+* **Ian Schmidt** --> IanMacnian
 * **Benjamin Liberona -> vaquitson**
 
 # Tareas:
