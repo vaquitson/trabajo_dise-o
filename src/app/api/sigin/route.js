@@ -2,9 +2,20 @@ import { promises as fs } from "fs";
 import path from "path"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 export async function POST(req){
   const { username, password } = await req.json();
+
+  // mongo client
+  const client = new MongoClient(process.env.MONGODB_URI, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
+
 
   // datos de usuarios
   const filePath = path.join(process.cwd(), "src/data/users.json")
