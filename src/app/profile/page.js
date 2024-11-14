@@ -33,7 +33,7 @@ const translations = {
     email: "Correo electrónico: johndoe@example.com",
     phone: "Teléfono: (123) 456-7890",
     experience: "Años de experiencia: 5 años",
-    about: "Tengo una pasión por artículos únicos y vintage. Me esfuerzo por proporcionar la mejor calidad de productos y atención al cliente.",
+    about: "Tengo una pasión por artículos únicos y vintage. Me esfuerzo por    proporcionar la mejor calidad de productos y atención al cliente.",
     addItem: "Agregar artículo",
     yourListings: "Tus anuncios",
     delete: "Eliminar",
@@ -81,8 +81,12 @@ export default function ProfilePage() {
   const [itemPrice, setItemPrice] = useState("");
   const [itemImage, setItemImage] = useState(null);
   const [profilePic, setProfilePic] = useState("/path/to/profile-pic.jpg");
-
-  const handleDelete = (id) => {
+  const [reviews, setReviews] = useState([]); // Reviews state
+  const [reviewName, setReviewName] = useState("");
+  const [reviewRating, setReviewRating] = useState("");
+  const [reviewComment, setReviewComment] = useState("");
+  const 
+  handleDelete = (id) => {
     setListings(listings.filter(item => item.id !== id));
   };
 
@@ -122,6 +126,25 @@ export default function ProfilePage() {
   const handleImageChange = (e) => {
     setItemImage(e.target.files[0]); // Set the selected file
   };
+
+  const resetReviewForm = () => {
+    setReviewName("");
+    setReviewRating("");
+    setReviewComment("");
+  };
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    const newReview = {
+      id: reviews.length + 1,
+      name: reviewName,
+      rating: reviewRating,
+      comment: reviewComment,
+    };
+    setReviews([...reviews, newReview]);
+    resetReviewForm();
+  };
+
 
   const user = {
     name: translations[language].name,
@@ -242,6 +265,57 @@ export default function ProfilePage() {
                 >
                   {translations[language].edit}
                 </button>
+              </div>
+            ))}
+          </div>
+        </div>
+         {/* Review Section */}
+         <div className="p-6 border-t bg-gray-50">
+          <h2 className="text-xl font-bold mb-4 text-center sm:text-left text-black">Reviews</h2>
+
+          {/* Review Form */}
+          <form onSubmit={handleReviewSubmit} className="mb-6">
+            <div className="flex flex-col sm:flex-row mb-4">
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={reviewName}
+                onChange={(e) => setReviewName(e.target.value)}
+                required
+                className="border p-2 mr-2 rounded flex-1 mb-2 sm:mb-0"
+              />
+              <input
+                type="number"
+                placeholder="Rating (1-5)"
+                value={reviewRating}
+                onChange={(e) => setReviewRating(e.target.value)}
+                required
+                min="1"
+                max="5"
+                className="border p-2 mr-2 rounded flex-1 mb-2 sm:mb-0"
+              />
+            </div>
+            <textarea
+              placeholder="Write your review here..."
+              value={reviewComment}
+              onChange={(e) => setReviewComment(e.target.value)}
+              required
+              className="border p-2 rounded w-full mb-4"
+            />
+            <div className="flex justify-center">
+              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+                Submit Review
+              </button>
+            </div>
+          </form>
+
+          {/* Display Reviews */}
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <div key={review.id} className="border p-4 rounded-lg bg-white shadow">
+                <h3 className="font-bold text-gray-900">{review.name}</h3>
+                <p className="text-gray-700">Rating: {review.rating}/5</p>
+                <p className="text-gray-600 mt-2">{review.comment}</p>
               </div>
             ))}
           </div>
