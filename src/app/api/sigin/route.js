@@ -15,25 +15,35 @@ export async function POST(req){
       deprecationErrors: true,
     }
   });
+  
+  try {
+    await client.connect();
 
+    const db = client.db("marketPlace");
+    const usuarios = db.collection("usuarios");
 
-  // datos de usuarios
-  const filePath = path.join(process.cwd(), "src/data/users.json")
-  const fileData = await fs.readFile(filePath, "utf8");
-  const users = JSON.parse(fileData);
-
-  // confirmamos que el usurio no exista previamente
-  if (username in users){
-    return new Response("message: the existing username\n", { status: 400 }); 
+  } catch (e){
+    console.log(e)
+    return new Response("message: error\n", { status: 400 }); 
   }
 
   // encriptar
   const hashRounds = 10;
   const hashedPassword = await bcrypt.hash(password, hashRounds);
 
-  users[username] = { "password": hashedPassword}
+  if (await usuarios.findOne({ "user": username })){ 
+    return new Response("message: the existing username\n", { status: 400 }); 
+  };
 
-  await fs.writeFile(filePath, JSON.stringify(users, null, "\n"));
+  try {
+    const resoult = usuarios.insertOne({
+      "user": username,
+      "password": hashedPassword
+    })
+  } catch (e) {
+    console.log(e) 
+    return new Response("message: the existing username\n", { status: 400 }); 
+  }
 
   return new Response("message: sigin succesfull", {status: 200});
 
