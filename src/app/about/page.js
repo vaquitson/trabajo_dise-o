@@ -1,9 +1,14 @@
 // src/pages/About.js
+"use client"
+import { useState } from "react";
 import React from "react";
+import Navbar from '@/components/Navbar';
 
 const About = () => {
+  const [language, setLanguage] = useState("en");
   return (
     <div style={styles.container}>
+      <Navbar setLanguage={setLanguage} language={language} />
       <h1 style={styles.title}>About Us</h1>
       <p style={styles.text}>
         Welcome to our company! We are dedicated to providing the best services
