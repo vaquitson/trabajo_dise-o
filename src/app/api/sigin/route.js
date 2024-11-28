@@ -1,50 +1,45 @@
-import { promises as fs } from "fs";
-import path from "path"
-import bcrypt from "bcrypt"
-import jwt from "jsonwebtoken"
-const { MongoClient, ServerApiVersion } = require('mongodb');
+import bcrypt from "bcrypt";
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-export async function POST(req){
+export async function POST(req) {
   const { username, password } = await req.json();
 
-  // mongo client
+  // Configuración del cliente de MongoDB
   const client = new MongoClient(process.env.MONGODB_URI, {
     serverApi: {
       version: ServerApiVersion.v1,
       strict: true,
       deprecationErrors: true,
-    }
+    },
   });
-  
+
   try {
     await client.connect();
 
     const db = client.db("marketPlace");
     const usuarios = db.collection("usuarios");
 
-  } catch (e){
-    console.log(e)
-    return new Response("message: error\n", { status: 400 }); 
-  }
+    const existingUser = await usuarios.findOne({ user: username });
+    if (existingUser) {
+      return new Response("message: the username already exists", {
+        status: 400,
+      });
+    }
 
-  // encriptar
-  const hashRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, hashRounds);
+    const hashRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, hashRounds);
 
-  if (await usuarios.findOne({ "user": username })){ 
-    return new Response("message: the existing username\n", { status: 400 }); 
-  };
+    await usuarios.insertOne({
+      user: username,
+      password: hashedPassword,
+    });
 
-  try {
-    const resoult = usuarios.insertOne({
-      "user": username,
-      "password": hashedPassword
-    })
+    return new Response("message: signup successful", { status: 200 });
   } catch (e) {
-    console.log(e) 
-    return new Response("message: the existing username\n", { status: 400 }); 
+    console.error("Error durante la operación:", e);
+    return new Response("message: internal server error", { status: 500 });
+  } finally {
+    await client.close();
   }
-
-  return new Response("message: sigin succesfull", {status: 200});
-
 }
+

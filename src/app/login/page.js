@@ -77,7 +77,7 @@ return (
       </form>
       <p className="text-sm text-center text-gray-600">
         ¿No tienes una cuenta?{" "}
-        <a href="/signup" className="text-blue-500 hover:underline">
+        <a href="/sigin" className="text-blue-500 hover:underline">
           Regístrate
         </a>
       </p>
