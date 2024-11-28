@@ -156,7 +156,7 @@ export default function ProfilePage() {
     const [language, setLanguage] = useState("en");}
   
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
+    <div className="bg-gray-100">
      <Navbar setLanguage={setLanguage} language={language} />
       {/* Language Selector */}
       <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
