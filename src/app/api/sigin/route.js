@@ -21,7 +21,8 @@ export async function POST(req) {
 
     const existingUser = await usuarios.findOne({ user: username });
     if (existingUser) {
-      return new Response("message: the username already exists", {
+      await client.close();
+      return new Response("message: the username already exists", { 
         status: 400,
       });
     }
