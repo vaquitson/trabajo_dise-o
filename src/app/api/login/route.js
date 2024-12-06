@@ -1,40 +1,47 @@
-import { promises as fs } from "fs";
-import path from "path"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 export async function POST(req){
 
   // get the username and password from the request
   const { username, password } = await req.json();
   
-  // obtenemos los datos de los usuarios
-  const filePath = path.join(process.cwd(), "src/data/users.json")
-  const fileData = await fs.readFile(filePath, "utf8");
-  const users = JSON.parse(fileData);
+  // Configuración del cliente de MongoDB
+  const client = new MongoClient(process.env.MONGODB_URI, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    },
+  });
 
+  try {
+    await client.connect();
 
-  if (username in users){ 
-    let passwordHash = users[username]["password"]
-    if (await bcrypt.compare(password, passwordHash)){
-      // generar el jwt
-      const token = jwt.sign({username}, process.env.jwt_secret, { expiresIn: "1h"})
+    const db = client.db("marketPlace");
+    const usuarios = db.collection("usuarios");
 
-      let res = {
-        message: username + " loged",
-        "username": username,
-        "token": token
+    const existingUser = await usuarios.findOne({ user: username });
+    // check if the user exist
+    if (existingUser) {
+      // check if the password is correct
+      if (await bcrypt.compare(password, existingUser.password)){
+        const token = jwt.sign({username}, process.env.jwt_secret, { expiresIn: "1h"})
+
+        let res = {
+          message: username + " loged",
+          "username": username,
+          "token": token
+        }
+
+        return new Response(JSON.stringify(res), { status:200 })
+
+      } else {
+        return new Response("message: User or password error", {status: 500})
       }
-
-      console.log(JSON.stringify(res))
-      return new Response(JSON.stringify(res), { status:200 })
     }
-    console.log("message: credencial invalida\n")
-    return new Response("message: credencial invalida\n", { status: 401})
-
-  } else {
-    console.log("message: credencial invalida\n")
-    return new Response("message: credencial invalida\n", { status: 401})
+  } catch {
+    return new Response("message: User or password error", {status: 500})
   }
-
 }

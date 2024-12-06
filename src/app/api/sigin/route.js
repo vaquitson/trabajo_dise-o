@@ -35,12 +35,14 @@ export async function POST(req) {
       password: hashedPassword,
     });
 
+    await client.close();
+
     return new Response("message: signup successful", { status: 200 });
   } catch (e) {
     console.error("Error durante la operación:", e);
+    await client.close();
     return new Response("message: internal server error", { status: 500 });
   } finally {
     await client.close();
   }
 }
-

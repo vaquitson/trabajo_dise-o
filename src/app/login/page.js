@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Navbar from '@/components/Navbar';
 import { useAuth } from "./../context/auth_context.js"
+import { useRouter } from "next/navigation";
 
 const translations = {
   en: {
@@ -34,6 +35,7 @@ export default function LoginPage(){
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [language, setLanguage] = useState("en");
+  const router = useRouter();
 
   const { login, logout } = useAuth()
 
@@ -49,11 +51,10 @@ export default function LoginPage(){
 
     if(res.ok){ 
       let body = await res.json()
-
-      console.log(body.token)
-      login(username, body.token) 
+      router.push("/profile")
+      
     } else {
-      console.log("noooo\n")
+      alert("Invalid user or password");
     }
   }
   const { title, username: usernameLabel, password: passwordLabel, button, noAccount, register } = translations[language];
