@@ -27,7 +27,11 @@ export async function POST(req){
     if (existingUser) {
       // check if the password is correct
       if (await bcrypt.compare(password, existingUser.password)){
-        const token = jwt.sign({username}, process.env.jwt_secret, { expiresIn: "1h"})
+        const jwt_boddy = {
+          "username": username
+        }
+
+        const token = jwt.sign(jwt_boddy, process.env.jwt_secret, { expiresIn: "1h"})
 
         let res = {
           message: username + " loged",
@@ -35,13 +39,18 @@ export async function POST(req){
           "token": token
         }
 
+        client.close();
         return new Response(JSON.stringify(res), { status:200 })
 
       } else {
+        
+        client.close();
         return new Response("message: User or password error", {status: 500})
       }
     }
   } catch {
+
+    client.close();
     return new Response("message: User or password error", {status: 500})
   }
 }

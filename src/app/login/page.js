@@ -48,11 +48,13 @@ export default function LoginPage(){
       body: JSON.stringify({"username": username, "password": password})
     })
     
-
     if(res.ok){ 
       let body = await res.json()
-      router.push("/profile")
       
+      localStorage.setItem("token", body.token)
+      localStorage.setItem("user", body.username)
+
+      router.push("/profile")
     } else {
       alert("Invalid user or password");
     }
