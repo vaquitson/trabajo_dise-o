@@ -84,16 +84,16 @@ const MarketplaceHome = () => {
       discountedPrice: "$179.99",
       description: "Ergonomic and comfortable office chair for long hours.",
       ranking: 4.4,
-      img: "https://via.placeholder.com/300x200", // Web image URL
+      img: "https://i.ebayimg.com/images/g/PhAAAOSwY99jZDp6/s-l400.jpg", // Web image URL
     },
     {
       id: 9,
-      name: "Running Shoes",
-      originalPrice: "$149.99",
-      discountedPrice: "$99.99",
-      description: "Lightweight and durable running shoes for daily use.",
+      name: "Personal Fan",
+      originalPrice: "$10.00",
+      discountedPrice: "$4.99",
+      description: "It saved me from many hot summers",
       ranking: 4.7,
-      img: "https://via.placeholder.com/300x200", // Web image URL
+      img: "https://www.thespruce.com/thmb/1vRDJD9EQT6Ksemfs0DHCOAdysA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/spr-shark-flexbreeze-fan-test-jenica-currie-8-c9ea69d28a73470b8bbb7a6188a20159.jpeg", // Web image URL
     },
   ];
 
