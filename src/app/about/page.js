@@ -1,41 +1,50 @@
 // src/pages/About.js
-"use client"
+"use client";
 import { useState } from "react";
 import React from "react";
 import Navbar from '@/components/Navbar';
 
 const About = () => {
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState("es");
   return (
     <div style={styles.container}>
       <Navbar setLanguage={setLanguage} language={language} />
-      <h1 style={styles.title}>About Us</h1>
+      <h1 style={styles.title}>Sobre Nuestra Plataforma</h1>
       <p style={styles.text}>
-        Welcome to our company! We are dedicated to providing the best services
-        and products to meet your needs. Our team is passionate about innovation
-        and customer satisfaction.
+        Bienvenido a nuestra plataforma de intercambio de artículos tecnológicos usados. 
+        Nuestro objetivo es conectar personas que buscan darle una segunda vida a los dispositivos 
+        tecnológicos y contribuir a un futuro más sostenible.
       </p>
       <div style={styles.section}>
-        <h2 style={styles.subtitle}>Our Mission</h2>
+        <h2 style={styles.subtitle}>Nuestra Misión</h2>
         <p style={styles.text}>
-          To deliver high-quality solutions that empower our clients to achieve
-          their goals and succeed in a competitive marketplace.
+          Facilitar el intercambio de artículos tecnológicos usados entre personas, 
+          promoviendo la reutilización, la economía circular y la reducción de residuos electrónicos.
         </p>
       </div>
       <div style={styles.section}>
-        <h2 style={styles.subtitle}>Our Vision</h2>
+        <h2 style={styles.subtitle}>Nuestra Visión</h2>
         <p style={styles.text}>
-          To be a global leader in our industry, recognized for our commitment
-          to excellence and sustainability.
+          Ser la plataforma líder en intercambio tecnológico sostenible, fomentando 
+          comunidades conectadas y comprometidas con el cuidado del medio ambiente.
         </p>
       </div>
       <div style={styles.section}>
-        <h2 style={styles.subtitle}>Meet the Team</h2>
+        <h2 style={styles.subtitle}>Nuestros Valores</h2>
         <ul>
-          <li style={styles.text}>Jane Doe - CEO</li>
-          <li style={styles.text}>John Smith - CTO</li>
-          <li style={styles.text}>Alex Johnson - COO</li>
+          <li style={styles.text}>Sostenibilidad: Reducimos el impacto ambiental promoviendo la reutilización.</li>
+          <li style={styles.text}>Conexión: Fomentamos relaciones entre personas a través del intercambio justo.</li>
+          <li style={styles.text}>Innovación: Creemos en soluciones creativas para un futuro mejor.</li>
+          <li style={styles.text}>Confianza: Garantizamos una experiencia segura y transparente para nuestros usuarios.</li>
         </ul>
+      </div>
+      <div style={styles.section}>
+        <h2 style={styles.subtitle}>Importancia para el Medio Ambiente</h2>
+        <p style={styles.text}>
+          Cada dispositivo reutilizado a través de nuestra plataforma ayuda a disminuir la cantidad 
+          de residuos electrónicos y la demanda de producción de nuevos dispositivos, reduciendo así 
+          el impacto ambiental y promoviendo un futuro más sostenible.
+        </p>
       </div>
     </div>
   );

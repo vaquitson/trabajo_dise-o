@@ -34,6 +34,13 @@ export async function POST(req) {
       user: username,
       password: hashedPassword,
     });
+  
+    // create the products entry for the user
+    const userProductsColection = db.collection("products");
+    await userProductsColection.insertOne({
+      user: username,
+      products: []
+    })
 
     await client.close();
 
