@@ -1,9 +1,37 @@
 "use client";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+
+// Translations object
+const translations = {
+  en: {
+    welcome: "Welcome to Our Marketplace!",
+    description: "Find amazing deals on products across various categories.",
+    featured: "Featured Items",
+    newArrivals: "New Arrivals",
+    discounted: "Discounted Items",
+  },
+  es: {
+    welcome: "¡Bienvenido a nuestro Mercado!",
+    description: "Encuentra ofertas increíbles en productos de varias categorías.",
+    featured: "Artículos Destacados",
+    newArrivals: "Nuevas Llegadas",
+    discounted: "Artículos con Descuento",
+  },
+  fr: {
+    welcome: "Bienvenue sur notre marché!",
+    description: "Trouvez des offres incroyables sur des produits dans diverses catégories.",
+    featured: "Articles en vedette",
+    newArrivals: "Nouveaux Arrivages",
+    discounted: "Articles en Promotion",
+  },
+};
 
 const MarketplaceHome = () => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [language, setLanguage] = useState("en"); // Default language is English
+  const router = useRouter();
 
   const handleClick = (item) => {
     setSelectedItem(item);
@@ -51,7 +79,7 @@ const MarketplaceHome = () => {
     },
     {
       id: 5,
-      name: "Ganming Microphone",
+      name: "Gaming Microphone",
       price: "$39.99",
       description: "Slightly old, but still works like a charm.",
       ranking: 4.7,
@@ -107,22 +135,24 @@ const MarketplaceHome = () => {
     return stars.padEnd(5, "☆"); // Ensure a total of 5 stars
   };
 
+  const { welcome, description, featured, newArrivals, discounted } = translations[language];
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Navbar */}
-      <Navbar />
+      <Navbar language={language} setLanguage={setLanguage} />
 
       {/* Main Content */}
       <div className="flex-grow flex flex-col items-center px-4 py-8">
         {/* Welcome Section */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-black">Welcome to Our Marketplace!</h1>
-          <p className="text-lg text-gray-600 mt-2">Find amazing deals on products across various categories.</p>
+          <h1 className="text-4xl font-bold text-black">{welcome}</h1>
+          <p className="text-lg text-gray-600 mt-2">{description}</p>
         </div>
 
         {/* Featured Items Section */}
         <div className="w-full mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Featured Items</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{featured}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredItems.map((item) => (
               <div
@@ -147,7 +177,7 @@ const MarketplaceHome = () => {
 
         {/* New Arrivals Section */}
         <div className="w-full mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">New Arrivals</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{newArrivals}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {newItems.map((item) => (
               <div
@@ -172,7 +202,7 @@ const MarketplaceHome = () => {
 
         {/* Discounted Items Section */}
         <div className="w-full mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Discounted Items</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{discounted}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {discountedItems.map((item) => (
               <div
@@ -187,8 +217,9 @@ const MarketplaceHome = () => {
                   onError={(e) => e.target.src = defaultImage} // Set default image on error
                 />
                 <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
-                <p className="text-gray-600 line-through">{item.originalPrice}</p>
-                <p className="text-red-600 font-bold">{item.discountedPrice}</p>
+                <p className="text-gray-600">
+                  <span className="line-through">{item.originalPrice}</span> {item.discountedPrice}
+                </p>
                 <p className="text-sm text-gray-500">{item.description}</p>
                 <p className="text-yellow-500">{renderStars(item.ranking)}</p>
               </div>
@@ -196,33 +227,6 @@ const MarketplaceHome = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {selectedItem && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm">
-            <button
-              onClick={handleClose}
-              className="text-gray-600 hover:text-gray-800 absolute top-2 right-2 text-lg font-bold"
-            >
-              ×
-            </button>
-            <img
-              src={selectedItem.img}
-              alt={selectedItem.name}
-              className="w-full h-64 object-cover rounded-md mb-4"
-              onError={(e) => e.target.src = defaultImage} // Set default image on error
-            />
-            <h3 className="text-xl font-semibold text-gray-800">{selectedItem.name}</h3>
-            {selectedItem.originalPrice && (
-              <p className="text-gray-600 line-through">{selectedItem.originalPrice}</p>
-            )}
-            <p className="text-red-600 font-bold">{selectedItem.discountedPrice || selectedItem.price}</p>
-            <p className="text-sm text-gray-500">{selectedItem.description}</p>
-            <p className="text-yellow-500">{renderStars(selectedItem.ranking)}</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
