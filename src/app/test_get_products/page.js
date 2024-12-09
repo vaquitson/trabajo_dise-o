@@ -6,21 +6,19 @@ export default function TestPage() {
   const [data, setData] = useState(null); // Estado para almacenar los datos
   const [error, setError] = useState(null); // Estado para manejar errores
   const [isDeleting, setIsDeleting] = useState(false); // Estado para controlar la acción de eliminar
-
+  const [isAdding, setIsAdding] = useState(false); // Estado para controlar la acción de agregar
+  const [newProduct, setNewProduct] = useState({ title: "", description: "", price: "", image: "" }); // Estado para el nuevo producto
 
   // Función para obtener datos
   const getData = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const user = localStorage.getItem("user")
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
 
       const res = await fetch("/api/get_user_products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          "user": user,
-          "token": token
-        })
+        body: JSON.stringify({ user, token }),
       });
 
       if (!res.ok) {
@@ -42,10 +40,10 @@ export default function TestPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          "title": title,
-          "token": localStorage.getItem("token"),
-          "user": localStorage.getItem("user")
-          }),
+         "title": title,
+          token: localStorage.getItem("token"),
+          user: localStorage.getItem("user"),
+        }),
       });
 
       if (!res.ok) {
@@ -64,6 +62,47 @@ export default function TestPage() {
     }
   };
 
+  // Función para agregar un producto
+  const addProduct = async () => {
+    setIsAdding(true);
+    try {
+      const res = await fetch("/api/upload_user_product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: localStorage.getItem("token"),
+          user: localStorage.getItem("user"),
+          title: newProduct.title,
+          description: newProduct.title,
+          price: newProduct.price,
+          image: newProduct.image
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Error al agregar producto: ${res.status}`);
+      }
+
+      const addedProduct = {
+          title: newProduct.title,
+          description: newProduct.title,
+          price: newProduct.price,
+          image: newProduct.image
+        }
+
+      // Actualizar la lista localmente
+      setData((prevData) => ({
+        ...prevData,
+        products: [...prevData.products, addedProduct],
+      }));
+      setNewProduct({ title: "", description: "", price: "", image: "" }); // Limpiar formulario
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -78,6 +117,56 @@ export default function TestPage() {
           <div className="bg-red-100 text-red-800 p-4 rounded-md">
             <p className="font-semibold">Error:</p>
             <p>{error}</p>
+          </div>
+        )}
+        <div className="flex justify-end mb-6">
+          <button
+            onClick={() => setIsAdding(!isAdding)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            {isAdding ? "Cerrar" : "Agregar Producto"}
+          </button>
+        </div>
+        {isAdding && (
+          <div className="bg-white p-6 shadow-md rounded-lg mb-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Nuevo Producto</h2>
+            <div className="grid grid-cols-1 gap-4">
+              <input
+                type="text"
+                placeholder="Título"
+                value={newProduct.title}
+                onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+                className="p-2 border rounded-md"
+              />
+              <textarea
+                placeholder="Descripción"
+                value={newProduct.description}
+                onChange={(e) =>
+                  setNewProduct({ ...newProduct, description: e.target.value })
+                }
+                className="p-2 border rounded-md"
+              ></textarea>
+              <input
+                type="number"
+                placeholder="Precio"
+                value={newProduct.price}
+                onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                className="p-2 border rounded-md"
+              />
+              <input
+                type="text"
+                placeholder="Imagen (ruta)"
+                value={newProduct.image}
+                onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+                className="p-2 border rounded-md"
+              />
+              <button
+                onClick={addProduct}
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              >
+                {isAdding ? "Guardando..." : "Guardar Producto"}
+              </button>
+            </div>
           </div>
         )}
         {!data ? (
