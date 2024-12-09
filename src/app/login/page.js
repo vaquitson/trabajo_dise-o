@@ -55,6 +55,7 @@ export default function LoginPage(){
       localStorage.setItem("user", body.username)
 
       router.push("/profile")
+
     } else {
       alert("Invalid user or password");
     }

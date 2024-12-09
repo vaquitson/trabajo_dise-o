@@ -31,7 +31,7 @@ export async function POST(req){
           "username": username
         }
 
-        const token = jwt.sign(jwt_boddy, process.env.jwt_secret, { expiresIn: "1h"})
+        const token = jwt.sign(jwt_boddy, process.env.jwt_secret, { expiresIn: "90h"})
 
         let res = {
           message: username + " loged",

@@ -35,7 +35,7 @@ const Formulario = () => {
       "title": formData.titulo,
       "description": formData.descripcion,
       "price": formData.precio,
-      "image": formData.foto})
+      "image": formData.foto.name})
     })
 
     if (res.ok){
@@ -47,6 +47,11 @@ const Formulario = () => {
         foto: null,
       });
     }
+
+    const imgRes = await fetch("/api/upload_image", {
+      method: "POST",
+      
+    })
 
   };
 

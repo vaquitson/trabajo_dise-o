@@ -1,6 +1,9 @@
 "use client";
+
 import Navbar from '@/components/Navbar';
 import React, { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const translations = {
   en: {
@@ -77,14 +80,22 @@ export default function ProfilePage() {
   const [listings, setListings] = useState([
   ]);
   const [editingItem, setEditingItem] = useState(null);
+
   const [itemTitle, setItemTitle] = useState("");
+  const [itemDescription, setItemescription] =  useState("")
   const [itemPrice, setItemPrice] = useState("");
   const [itemImage, setItemImage] = useState(null);
+
   const [profilePic, setProfilePic] = useState("/path/to/profile-pic.jpg");
   const [reviews, setReviews] = useState([]); // Reviews state
   const [reviewName, setReviewName] = useState("");
   const [reviewRating, setReviewRating] = useState("");
   const [reviewComment, setReviewComment] = useState("");
+
+  const [userName, setUserName] = useState("");
+  const [validUser, setValidUser] = useState(null);
+  const router = useRouter();
+
   const 
   handleDelete = (id) => {
     setListings(listings.filter(item => item.id !== id));
@@ -153,7 +164,46 @@ export default function ProfilePage() {
   };
 
   function MyApp() {
-    const [language, setLanguage] = useState("en");}
+    const [language, setLanguage] = useState("en");
+  }
+
+  async function check_token_and_user(){
+    const token = localStorage.getItem("token");
+    const locasStorageUser = localStorage.getItem("user");
+
+    if (token === null || locasStorageUser === null){
+      setValidUser(false);
+      console.log("token null o user null")
+      return
+    }
+    setUserName(locasStorageUser)
+    const res = await fetch("api/verifie_user_token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({"user": locasStorageUser, "token": token})
+    })
+
+    if (res.ok){
+      console.log("res ok")
+      setValidUser(true);
+    } else {
+      console.log("no res ok")
+      setValidUser(false)
+    }
+    
+  }
+
+  useEffect(() => {
+    check_token_and_user(); 
+    console.log("user state " + validUser)
+  }, [])
+
+  if (validUser === false){
+    router.push("/login")
+    return null
+  } else if (validUser === null){
+    return (<p>loading ...</p>)
+  }
   
   return (
     <div className="bg-gray-100">
@@ -168,7 +218,7 @@ export default function ProfilePage() {
             className="w-24 h-24 rounded-full border-4 border-white mb-4 sm:mb-0"
           />
           <div className="text-center sm:text-left sm:ml-6">
-            <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{userName}</h1>
             <p className="text-sm text-gray-800">{user.location}</p>
             <p className="mt-2 text-sm sm:text-base text-gray-800">{user.bio}</p>
             <input
@@ -184,7 +234,7 @@ export default function ProfilePage() {
         {showContactInfo && (
           <div className="p-6 border-t bg-gray-50">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900">{translations[language].contactInfo}</h2>
-            <p className="mt-2 text-gray-700">{translations[language].email}</p>
+            <p className="mt-2 text-gray-700">{userName + "@gmail.com"}</p>
             <p className="mt-1 text-gray-700">{translations[language].phone}</p>
             <p className="mt-1 text-gray-700">{translations[language].experience}</p>
             <p className="mt-1 text-gray-700">{translations[language].about}</p>
