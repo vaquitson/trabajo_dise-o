@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function TestPage() {
   const [data, setData] = useState(null); // Estado para almacenar los datos
@@ -8,6 +9,38 @@ export default function TestPage() {
   const [isDeleting, setIsDeleting] = useState(false); // Estado para controlar la acción de eliminar
   const [isAdding, setIsAdding] = useState(false); // Estado para controlar la acción de agregar
   const [newProduct, setNewProduct] = useState({ title: "", description: "", price: "", image: "" }); // Estado para el nuevo producto
+
+  const [userName, setUserName] = useState("");
+  const [validUser, setValidUser] = useState(null);
+  const router = useRouter();
+
+  async function check_token_and_user(){
+    const token = localStorage.getItem("token");
+    const locasStorageUser = localStorage.getItem("user");
+
+    if (token === null || locasStorageUser === null){
+      setValidUser(false);
+      console.log("token null o user null")
+      return
+    }
+    setUserName(locasStorageUser)
+    const res = await fetch("api/verifie_user_token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({"user": locasStorageUser, "token": token})
+    })
+
+    if (res.ok){
+      console.log("res ok")
+      setValidUser(true);
+    } else {
+      console.log("no res ok")
+      setValidUser(false)
+    }
+    
+  }
+
+
 
   // Función para obtener datos
   const getData = async () => {
@@ -23,12 +56,15 @@ export default function TestPage() {
 
       if (!res.ok) {
         throw new Error(`Error en la solicitud: ${res.status}`);
+        check_token_and_user(); 
       }
 
       const jsonData = await res.json();
       setData(jsonData); // Almacenar los datos obtenidos en el estado
     } catch (err) {
+      return null
       setError(err.message); // Manejar errores
+
     }
   };
 
@@ -47,6 +83,7 @@ export default function TestPage() {
       });
 
       if (!res.ok) {
+        check_token_and_user(); 
         throw new Error(`Error al eliminar producto: ${res.status}`);
       }
 
@@ -80,6 +117,7 @@ export default function TestPage() {
       });
 
       if (!res.ok) {
+        check_token_and_user(); 
         throw new Error(`Error al agregar producto: ${res.status}`);
       }
 
@@ -104,8 +142,19 @@ export default function TestPage() {
   };
 
   useEffect(() => {
+    check_token_and_user(); 
+    console.log("user state " + validUser)
     getData();
   }, []);
+
+
+  if (validUser === false){
+    router.push("/login")
+    return null
+  } else if (validUser === null){
+    return (<p>loading ...</p>)
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
@@ -154,10 +203,16 @@ export default function TestPage() {
                 className="p-2 border rounded-md"
               />
               <input
-                type="text"
-                placeholder="Imagen (ruta)"
-                value={newProduct.image}
-                onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
+                type="file"
+                accept="image/*"
+
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setNewProduct({ ...newProduct, image: file.name });
+                  }
+                }}
+
                 className="p-2 border rounded-md"
               />
               <button
