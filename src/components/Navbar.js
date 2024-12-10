@@ -24,6 +24,13 @@ function Navbar({ setLanguage, language }) {
           <li>
             <Link href="/login">Login</Link>
           </li>
+          <li>
+            <Link href="/dashboards">
+              <button className="px-3 py-2 rounded bg-green-600 hover:bg-green-700">
+                Dashboards
+              </button>
+            </Link>
+          </li>
         </ul>
 
         {/* Language Selector Dropdown */}
@@ -73,4 +80,3 @@ function Navbar({ setLanguage, language }) {
 }
 
 export default Navbar;
-
