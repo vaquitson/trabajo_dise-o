@@ -25,7 +25,7 @@ function Navbar({ setLanguage, language }) {
             <Link href="/login">Login</Link>
           </li>
           <li>
-            <Link href="/dashboards">
+            <Link href="https://charts.mongodb.com/charts-proyecto_diseno-skvznyt/embed/dashboards?id=6757707b-adfe-4573-851c-8c092f552d5f&theme=light&autoRefresh=true&maxDataAge=3600&showTitleAndDesc=true&scalingWidth=fixed&scalingHeight=fixed">
               <button className="px-3 py-2 rounded bg-green-600 hover:bg-green-700">
                 Dashboards
               </button>
